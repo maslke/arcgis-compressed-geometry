@@ -15,6 +15,13 @@ public final class CompressedGeometryDecoder {
         String first = parts[0];
         if (first.startsWith("+0")) {
             int flag = Integer.parseInt(first.substring(5, 6));
+            int version = Integer.parseInt(first.substring(3, 4));
+            if (version != 1) {
+                throw new IllegalArgumentException("Compressed geometry: Unexpected version.");
+            }
+            if (flag > 3) {
+                throw new IllegalArgumentException("Compressed geometry: Invalid flags.");
+            }
             first = first.substring(6);
             Line line = decodeXy(first);
             if (flag == 0) {
@@ -26,7 +33,7 @@ public final class CompressedGeometryDecoder {
             }
             if ((flag & 2) == 2) {
                 BiConsumer<Point, Double> consumer = Point::setM;
-                decode(line, parts[2], consumer);
+                decode(line, parts[parts.length - 1], consumer);
             }
             return line;
         } else {
@@ -34,30 +41,37 @@ public final class CompressedGeometryDecoder {
         }
     }
 
-    private static void decode(Line line, String part, BiConsumer<Point, Double> consumer) {
-        Matcher matcher = pattern.matcher(part);
-        List<String> items = new ArrayList<>();
-        while (matcher.find()) {
-            String p1 = matcher.group(1);
-            String p2 = matcher.group(2);
-            if ("-".equals(p1)) {
-                items.add("-" + p2);
-            } else {
-                items.add(p2);
-            }
+    private static Line decodeXy(String part) {
+        List<String> xys = extract(part);
+        int factor = Integer.parseInt(xys.get(0), 32);
+        int differenceX = 0;
+        int differenceY = 0;
+        Point[] points = new Point[(xys.size() - 1) / 2];
+        int inx = 0;
+        for (int i = 1; i < xys.size(); i = i + 2) {
+            int x = Integer.parseInt(xys.get(i), 32);
+            int y = Integer.parseInt(xys.get(i + 1), 32);
+            differenceX += x;
+            differenceY += y;
+            points[inx++] = new Point(differenceX * 1.0 / factor, differenceY * 1.0 / factor);
         }
-        int difference = Integer.parseInt(items.get(0), 32);
-        int current = 0;
+
+        return new Line(points);
+    }
+
+    private static void decode(Line line, String part, BiConsumer<Point, Double> consumer) {
+        List<String> items = extract(part);
+        int factor = Integer.parseInt(items.get(0), 32);
+        int difference = 0;
         int inx = 0;
         for (int i = 1; i < items.size(); i++) {
             int value = Integer.parseInt(items.get(i), 32);
-            current += value;
-            consumer.accept(line.getPoints()[inx++], current * 1.0 / difference);
+            difference += value;
+            consumer.accept(line.getPoints()[inx++], difference * 1.0 / factor);
         }
     }
 
-
-    private static Line decodeXy(String part) {
+    private static List<String> extract(String part) {
         Matcher matcher = pattern.matcher(part);
         List<String> xys = new ArrayList<>();
         while (matcher.find()) {
@@ -69,19 +83,6 @@ public final class CompressedGeometryDecoder {
                 xys.add(p2);
             }
         }
-        int difference = Integer.parseInt(xys.get(0), 32);
-        int currentX = 0;
-        int currentY = 0;
-        Point[] points = new Point[(xys.size() - 1) / 2];
-        int inx = 0;
-        for (int i = 1; i < xys.size(); i = i + 2) {
-            int x = Integer.parseInt(xys.get(i), 32);
-            int y = Integer.parseInt(xys.get(i + 1), 32);
-            currentX += x;
-            currentY += y;
-            points[inx++] = new Point(currentX * 1.0 / difference, currentY * 1.0 / difference);
-        }
-
-        return new Line(points);
+        return xys;
     }
 }
