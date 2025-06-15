@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.maslke.gis</groupId>
+    <groupId>com.github.maslke.gis</groupId>
     <artifactId>arcgis-compressed-geometry</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
-    <description>This project provide a method to decode arcgis compressed geometry, which is used in route analysis result</description>
+    <description>This project provide a method to decode arcgis compressed geometry</description>
     <build>
         <plugins>
             <plugin>
@@ -23,6 +23,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

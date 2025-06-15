@@ -1,4 +1,4 @@
-package com.maslke.gis;
+package com.github.maslke.gis;
 
 import org.junit.Test;
 
