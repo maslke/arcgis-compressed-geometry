@@ -14,7 +14,7 @@ public final class CompressedGeometryEncoder {
     private static final String COMRESSED_GEOMETRY_PREFIX = "+0+1+";
 
 
-    private CompressedGeometryEncoder() {
+    CompressedGeometryEncoder() {
     }
 
     

@@ -11,6 +11,8 @@ public final class CompressedGeometryDecoder {
 
     private static final Pattern PATTERN = Pattern.compile("([+-])([^+-]+)");
 
+    CompressedGeometryDecoder() {
+
     public static List<double[]> decode(String geometry) {
         String[] parts = geometry.split("\\|");
         String first = parts[0];

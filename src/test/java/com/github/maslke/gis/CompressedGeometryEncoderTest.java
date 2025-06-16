@@ -2,7 +2,6 @@ package com.github.maslke.gis;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
