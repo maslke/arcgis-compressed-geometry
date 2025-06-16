@@ -8,6 +8,20 @@ import static org.junit.Assert.assertEquals;
 
 public class CompressedGeometryEncoderTest {
 
+
+    @Test
+    public void testEncodeWithDefaultFactor() {
+        List<double[]> coordinates = Arrays.asList(
+            new double[]{120.234454, 11.3453453},
+            new double[]{120.3467453, 12.5421568}
+        );
+        String geometry = CompressedGeometryEncoder.encode(coordinates);
+        assertEquals("+0+1+0+9og+14m58+3epd+133+bm0", geometry);
+
+        String geometry2 = CompressedGeometryEncoder.encode(coordinates, "xy");
+        assertEquals("+0+1+0+9og+14m58+3epd+133+bm0", geometry2);
+    }
+
     @Test
     public void testEncodeWhenNoZAndNoM() {
         List<double[]> coordinates = Arrays.asList(

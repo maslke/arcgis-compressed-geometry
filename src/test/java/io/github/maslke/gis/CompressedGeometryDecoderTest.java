@@ -122,4 +122,14 @@ public class CompressedGeometryDecoderTest {
         assertEquals(4.5, points.get(3)[2], 0.0001);
         assertEquals(0.5721666666666667, points.get(3)[3], 0.0001);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDecodeInvalidVersion() {
+        CompressedGeometryDecoder.decode("+0+2+3+1+emjd+3j07m+3+0+0+1-3-1|+9og+0+lv4+0+lv4|+5rg+uq+r9+au+168");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDecodeInvalidFlag() {
+        CompressedGeometryDecoder.decode("+0+1+4+1+emjd+3j07m+3+0+0+1-3-1|+9og+0+lv4+0+lv4|+5rg+uq+r9+au+168");
+    }
 }

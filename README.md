@@ -14,6 +14,16 @@ This library provides encoding and decoding functionality for ArcGIS Compressed 
 - xyzm (coordinates with elevation and measure values)
 
 
+## Add Dependency
+
+```xml
+<dependency>
+  <groupId>io.github.maslke</groupId>
+  <artifactId>arcgis-compressed-geometry</artifactId>
+  <version>${VERSION}</version>
+</dependency>
+```
+
 ## How to use
 
 ### Encode
