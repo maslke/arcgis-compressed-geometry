@@ -1,4 +1,4 @@
-package com.github.maslke.gis;
+package io.github.maslke.gis;
 
 import java.util.ArrayList;
 import java.util.List;
